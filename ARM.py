@@ -17,7 +17,7 @@ def readfile(file_name):
         print(f"A error occurred: {e}")
 
     
-def find_L1(transactions,min_sup,n):
+def find_L1(transactions,min_sup):
     C1={}
     for transaction in transactions:
         for item in transaction:
@@ -29,7 +29,7 @@ def find_L1(transactions,min_sup,n):
 
     L1={}
     for item in C1:
-        if C1[item]>=min_sup*n:
+        if C1[item]>=min_sup:
             key=frozenset([item])
             L1[key]=C1[item]
             #L1[frozenset(item)]=C1[item]
@@ -39,14 +39,14 @@ def find_L1(transactions,min_sup,n):
 
 
 
-def find_Lk(C,transactions,min_sup,n):
+def find_Lk(C,transactions,min_sup):
     for itemset in C:
         for transaction in transactions:
             if itemset.__le__(transaction):
                 C[itemset]+=1
     L={}
     for itemset in C:
-        if C[itemset]>=min_sup*n:
+        if C[itemset]>=min_sup:
             L[itemset]=C[itemset]
     return L
 
@@ -59,7 +59,7 @@ def main():
         print("Usage: python association_rule.py min_sup min_conf file_name")
         return
 
-    min_sup = float(sys.argv[1])
+    min_sup = int(sys.argv[1])
     min_conf = float(sys.argv[2])
     file_name = sys.argv[3]
 
@@ -69,7 +69,7 @@ def main():
     transactions=readfile(file_name)
     n=len(transactions)
     print(len(transactions))
-    L1=find_L1(transactions,min_sup,n)
+    L1=find_L1(transactions,min_sup)
     for i in range(len(transactions)):
         transactions[i]=frozenset(transactions[i])
     frequency_itemset={}
@@ -97,7 +97,7 @@ def main():
                         else:
                             if itemset_1|itemset_2 not in C:
                                 C[itemset_1|itemset_2]=0
-        L=find_Lk(C,transactions,min_sup,n)
+        L=find_Lk(C,transactions,min_sup)
         if K==1:
             L2=L
         for itemset in L:
@@ -114,10 +114,10 @@ def main():
                     RHS=FIS-frozenset(LHS)
                     now_conf=frequency_itemset[FIS]/frequency_itemset[frozenset(LHS)]
                     if now_conf>=min_conf:
-                        StrongAssociationRules.append([LHS,tuple(RHS),format(frequency_itemset[FIS]/n,".3f"),format(now_conf,".3f")])
-    print(f"Num of SAR = {len(StrongAssociationRules)}")
-    for SAR in StrongAssociationRules:
-        print(f"{SAR[0]}->{SAR[1]},sup={SAR[2]},conf={SAR[3]}")
+                        StrongAssociationRules.append([LHS,tuple(RHS),format(frequency_itemset[FIS]),format(now_conf,".3f")])
+    # for SAR in StrongAssociationRules:
+    #     print(f"{SAR[0]}->{SAR[1]},sup={SAR[2]},conf={SAR[3]}")
+    print(f"num of StrongAssociationRule={len(StrongAssociationRules)}")
     
 
 
