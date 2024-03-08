@@ -12,6 +12,7 @@
 num of freqency_itemset is 68
 num of StrongAssociationRule is 60
 ![alt text](image.png)
+### TestCase1
 > **min_sup=1000,min_conf=0.6**
 num of freqency_itemset is 135
 num of StrongAssociationRule is 84
