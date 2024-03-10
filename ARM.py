@@ -1,5 +1,6 @@
 import sys
 from itertools import combinations
+import csv
 def readfile(file_name):
     try:
         transactions=[]
@@ -50,7 +51,23 @@ def find_Lk(C,transactions,min_sup):
             L[itemset]=C[itemset]
     return L
 
+def output_format_processing(output_list):
+	for i in range(len(output_list)):
+		LHS_string=""
+		LHS_string+="{"
+		for j in output_list[i][0]:
+			LHS_string+=f"{j} " 
+		LHS_string=LHS_string[:-1]
+		LHS_string+="}"
+		output_list[i][0]=LHS_string
 
+		RHS_string=""
+		RHS_string+="{"
+		for j in output_list[i][1]:
+			RHS_string+=f"{j} " 
+		RHS_string=RHS_string[:-1]
+		RHS_string+="}"
+		output_list[i][1]=RHS_string
 
 
 
@@ -107,6 +124,7 @@ def main():
     print(f"frequency itemset=\n{frequency_itemset}")
     print(f"frequency_itemset_length={len(frequency_itemset)}")
     StrongAssociationRules=[]
+    output=[]
     for FIS in frequency_itemset:
         if len(FIS)>1:
             for j in range(1,len(FIS)):
@@ -115,9 +133,19 @@ def main():
                     now_conf=frequency_itemset[FIS]/frequency_itemset[frozenset(LHS)]
                     if now_conf>=min_conf:
                         StrongAssociationRules.append([LHS,tuple(RHS),format(frequency_itemset[FIS]),format(now_conf,".3f")])
+                        output.append([LHS,RHS,format(frequency_itemset[FIS]),format(now_conf,".3f")])
+    output_format_processing(output)
+    # print("rule length=",len(output))
     # for SAR in StrongAssociationRules:
     #     print(f"{SAR[0]}->{SAR[1]},sup={SAR[2]},conf={SAR[3]}")
     print(f"num of StrongAssociationRule={len(StrongAssociationRules)}")
+    #print(output)
+    # Write output to file
+    with open('output.csv', 'w',newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["LHS","RHS", "support", "confidence"])
+        writer.writerows(output)
+
     
 
 

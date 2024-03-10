@@ -17,3 +17,8 @@ num of StrongAssociationRule is 60
 num of freqency_itemset is 135
 num of StrongAssociationRule is 84
 ![alt text](image-1.png)
+
+## 輸出檔
+我有將結果輸出成一份csv檔，column name包含LHS(rule的左手邊),RHS(rule的右手邊),support(為整數),confidence
+
+![alt text](image-2.png)
